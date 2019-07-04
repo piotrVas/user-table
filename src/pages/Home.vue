@@ -15,10 +15,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto1111</td>
+                    <tr v-for="user in users" :key="user.id">
+                        <th scope="row">{{user.id}}</th>
+                        <td>{{user.username}}</td>
+                        <td>{{user.password}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -28,6 +28,22 @@
 </template>
 
 <script>
+    export default{
+        data(){
+            return{
+
+            }
+        },
+        mounted(){
+            this.$store.dispatch('getAllUsers');
+        },
+        computed:{
+            users(){
+                return this.$store.getters.users;
+            }
+        }
+    }
+
 
 </script>
 

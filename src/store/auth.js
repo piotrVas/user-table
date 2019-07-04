@@ -6,7 +6,8 @@ export default {
     },
     mutations:{
         setUsers(state,payload){
-            return state.user = payload
+            console.log(payload);
+            return state.users = payload
         }
     },
     actions:{
@@ -22,12 +23,12 @@ export default {
             try{
                 let snapShot = await fb.database().ref('users').once('value');
                 let obj = snapShot.val();
-                for(let key in obj){
-                    //console.log(obj[key]);
+                Object.keys(obj).forEach(key=>{
+                    console.log(obj[key]);
                     if(obj[key].username === payload.username && obj[key].password === payload.password){
                         return true
                     }
-                }
+                });
                 return false
             }
             catch(error){
@@ -35,7 +36,22 @@ export default {
             }
         },
         async getAllUsers({commit}){
-            
+            try{
+                const fbVal = await fb.database().ref('users').once('value');
+                let allUsers = fbVal.val();
+                const users = [];
+                let count = 1
+                Object.keys(allUsers).forEach(key=>{
+                    //console.log(allUsers[key]);
+                    allUsers[key].id = count++;
+                    users.push(allUsers[key]);
+                });
+                commit('setUsers',users);
+
+            }
+            catch(error){
+
+            }
         }
     },
     getters:{

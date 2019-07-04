@@ -55,7 +55,7 @@
                            password: this.user.password
                        }
                        if(this.checkOrCreateUserInLocal(User)){
-                           return this.$router.push('/home');
+                           setTimeout(()=>this.$router.push('/home'),2000);
 					   }
 						console.log(localStorage[User.username]);
 					}
