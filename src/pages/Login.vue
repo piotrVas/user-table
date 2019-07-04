@@ -66,7 +66,7 @@
 				if(localStorage[obj.username]){
                     localUser = JSON.parse(localStorage[obj.username]);
                     if(obj.username === localUser.username && obj.password === localUser.password){
-                        //console.log(this.$router.push('/home'));
+                        this.checkLocalUserInDB(obj)
 						return true
 					}
 					else if(obj.username === localUser.username && obj.password !== localUser.password){
@@ -91,6 +91,14 @@
 			},
 			createUserLocal(obj){
 			    localStorage[obj.username] = JSON.stringify(obj);
+			},
+			checkLocalUserInDB(obj){
+                this.$store.dispatch('checkUserInDB',obj).then(res=>{
+                    console.log(res);
+                    if(res === false){
+                        this.$store.dispatch('createUser', obj);
+					}
+				})
 			}
 		}
 	}

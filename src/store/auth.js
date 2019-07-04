@@ -23,12 +23,12 @@ export default {
             try{
                 let snapShot = await fb.database().ref('users').once('value');
                 let obj = snapShot.val();
-                Object.keys(obj).forEach(key=>{
+                for(let key in obj){
                     console.log(obj[key]);
                     if(obj[key].username === payload.username && obj[key].password === payload.password){
                         return true
                     }
-                });
+                }
                 return false
             }
             catch(error){
@@ -36,9 +36,10 @@ export default {
             }
         },
         async getAllUsers({commit}){
+            commit('setReload',true);
             try{
                 const fbVal = await fb.database().ref('users').once('value');
-                let allUsers = fbVal.val();
+                let allUsers = fbVal.val() || [];
                 const users = [];
                 let count = 1
                 Object.keys(allUsers).forEach(key=>{
@@ -47,7 +48,7 @@ export default {
                     users.push(allUsers[key]);
                 });
                 commit('setUsers',users);
-
+                commit('setReload',false);
             }
             catch(error){
 

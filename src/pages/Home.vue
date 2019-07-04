@@ -4,7 +4,7 @@
             <div class="login-cover-image"></div>
             <div class="login-cover-bg home-cover-bg"></div>
         </div>
-        <div class="wrap-content">
+        <div v-if="users.length!=0 && !reload" class="wrap-content">
             <h1>Home Page</h1>
             <table class="table table-dark">
                 <thead>
@@ -23,6 +23,8 @@
                 </tbody>
             </table>
         </div>
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw reload" v-if="reload"></i>
+        <div  class="user-not-found" v-if="users.length == 0&&!reload"><h2>Users not found</h2></div>
 
     </div>
 </template>
@@ -34,12 +36,15 @@
 
             }
         },
-        mounted(){
+        created(){
             this.$store.dispatch('getAllUsers');
         },
         computed:{
             users(){
                 return this.$store.getters.users;
+            },
+            reload(){
+                return this.$store.getters.reload;
             }
         }
     }
@@ -58,5 +63,21 @@
         align-items: center;
         max-width: 900px;
         margin: 0 auto;
+    }
+    .reload{
+        top: 50%;
+        left: 50%;
+        position: fixed;
+        margin-left: -0.5em;
+        color: #fff;
+    }
+    .user-not-found{
+        position: relative;
+        max-width: 900px;
+        color: white;
+        background: #343A40;
+        margin: 0 auto;
+        padding: 60px;
+        opacity:0.8;
     }
 </style>
