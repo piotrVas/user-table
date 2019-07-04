@@ -16,7 +16,11 @@
 						<span>{{ errors.first('username') }}<i v-if="errors.first('username')"> (latin letters only)</i></span>
 					</div>
 					<div class="form-group m-b-20">
-						<input v-model="user.password" name="password"  ref="password" type="passowrd" v-validate="{required: true, regex: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]/}" id="password" class="input form-control" placeholder="Password">
+						<vue-password name="password" v-validate="{required:true, regex:/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/}" id="password" :disableStrength="true" v-model="user.password"
+									  classes="input form-control"
+									  :user-inputs="[user.username]"
+									  placeholder="Password">
+						</vue-password>
 						<span>{{ errors.first('password') }}<i v-if="errors.first('password')"> (latin letters only, e.g: "aA!@#$%^&*123")</i></span>
 					</div>
 					<div class="login-buttons">
@@ -30,8 +34,12 @@
 
 <script>
 	import fb from 'firebase'
+    import {VuePassword} from 'vue-password'
 
 	export default{
+        components: {
+            VuePassword
+        },
 	    data(){
 	        return{
 	            user: {

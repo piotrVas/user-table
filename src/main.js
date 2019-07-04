@@ -7,6 +7,7 @@ import VeeValidate from 'vee-validate'
 import * as fb from 'firebase'
 import VueX from 'vuex'
 import store from './store'
+import VuePassword from 'vue-password'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -18,6 +19,7 @@ Vue.use(BootstrapVue)
 Vue.use(VueRouter)
 Vue.use(VeeValidate)
 Vue.use(VueX)
+Vue.component(VuePassword)
 
 const router = new VueRouter({
     routes,
