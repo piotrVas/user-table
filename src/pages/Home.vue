@@ -17,8 +17,8 @@
                 <tbody>
                     <tr v-for="user in users" :key="user.id">
                         <th scope="row">{{user.id}}</th>
-                        <td>{{user.username}}</td>
-                        <td>{{user.password}}</td>
+                        <td><div class="wrap-item">{{user.username}}</div></td>
+                        <td><div class="wrap-item">{{user.password}}</div></td>
                     </tr>
                 </tbody>
             </table>
@@ -79,5 +79,19 @@
         margin: 0 auto;
         padding: 60px;
         opacity:0.8;
+    }
+    .wrap-item{
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    table{
+        table-layout: auto;
+    }
+    @media(max-width: 900px){
+        table{
+            table-layout: fixed;
+        }
     }
 </style>

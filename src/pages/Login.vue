@@ -24,7 +24,7 @@
 						<span>{{ errors.first('password') }}<i v-if="errors.first('password')"> (latin letters only, e.g: "aA!@#$%^&*123")</i></span>
 					</div>
 					<div class="login-buttons">
-						<button type="button" @click="onSubmit" class="btn btn-dark btn-block btn-lg"><span class="title-btn">Sign me in</span><!--<i v-else class="fa fa-spinner fa-pulse"></i>--></button>
+						<button type="button" @click="onSubmit" class="btn btn-dark btn-block btn-lg" :disabled="reload"><span v-if="!reload" class="title-btn">Sign me in</span><i v-else class="fa fa-spinner fa-pulse"></i></button>
 					</div>
 				</form>
 			</div>
@@ -35,11 +35,18 @@
 <script>
 	import fb from 'firebase'
     import {VuePassword} from 'vue-password'
+    import sha256  from 'sha256';
 
 	export default{
         components: {
             VuePassword
         },
+		computed:{
+            reload(){
+                return this.$store.getters.reload;
+			}
+
+		},
 	    data(){
 	        return{
 	            user: {
@@ -58,18 +65,23 @@
 					}
 					else {
                        console.log('valid');
+                       this.$store.dispatch('getReload',true);
                        const User = {
                            username: this.user.username,
                            password: this.user.password
                        }
+                       User.password = sha256(User.password);
                        if(this.checkOrCreateUserInLocal(User)){
-                           setTimeout(()=>this.$router.push('/home'),2000);
+                           setTimeout(()=>{this.$router.push('/home');
+                               this.$store.dispatch('getReload',false);
+						   },2000);
 					   }
-						console.log(localStorage[User.username]);
+					   this.$store.dispatch('getReload',false);
 					}
 				})
 			},
 			checkOrCreateUserInLocal(obj){
+	            this.$store.dispatch('clearError');
 	            let localUser;
 				if(localStorage[obj.username]){
                     localUser = JSON.parse(localStorage[obj.username]);
@@ -78,7 +90,7 @@
 						return true
 					}
 					else if(obj.username === localUser.username && obj.password !== localUser.password){
-                        //throw {message: 'this user already exists'}
+                        this.$store.dispatch('setError','This username already exists');
 						return false
 					}
 				}

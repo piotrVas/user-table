@@ -12,14 +12,16 @@ export default {
     },
     actions:{
         async createUser({commit},payload){
+            commit('setClearError');
             try{
                 await fb.database().ref('users').push(payload);
             }
             catch(error){
-                console.log(error);
+                commit('setError', error.message);
             }
         },
         async checkUserInDB({commit},payload){
+            commit('setClearError');
             try{
                 let snapShot = await fb.database().ref('users').once('value');
                 let obj = snapShot.val();
@@ -32,10 +34,11 @@ export default {
                 return false
             }
             catch(error){
-                console.log(error);
+                commit('setError', error.message);
             }
         },
         async getAllUsers({commit}){
+            commit('setClearError');
             commit('setReload',true);
             try{
                 const fbVal = await fb.database().ref('users').once('value');
@@ -51,7 +54,8 @@ export default {
                 commit('setReload',false);
             }
             catch(error){
-
+                commit('setError',error.message);
+                commit('setReload',false);
             }
         }
     },
