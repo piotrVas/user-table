@@ -12,15 +12,15 @@
 			<div class="login-content">
 				<form method="POST" class="margin-bottom-0">
 					<div class="form-group m-b-20">
-						<input v-validate="{required:true, regex: /^[a-zA-Z]+$/}" id="username" class="input form-control" type="text" name="username"  placeholder="Username">
+						<input v-model="user.username" v-validate="{required:true, regex: /^[a-zA-Z]+$/}" id="username" class="input form-control" type="text" name="username"  placeholder="Username">
 						<span>{{ errors.first('username') }}<i v-if="errors.first('username')"> (latin letters only)</i></span>
 					</div>
 					<div class="form-group m-b-20">
-						<input name="password"  ref="password" type="passowrd" v-validate="{required: true, regex: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]/}" id="password" class="input form-control" placeholder="Password">
+						<input v-model="user.password" name="password"  ref="password" type="passowrd" v-validate="{required: true, regex: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]/}" id="password" class="input form-control" placeholder="Password">
 						<span>{{ errors.first('password') }}<i v-if="errors.first('password')"> (latin letters only, e.g: "aA!@#$%^&*123")</i></span>
 					</div>
 					<div class="login-buttons">
-						<button type="button" class="btn btn-dark btn-block btn-lg"><span class="title-btn">Sign me in</span><!--<i v-else class="fa fa-spinner fa-pulse"></i>--></button>
+						<button type="button" @click="onSubmit" class="btn btn-dark btn-block btn-lg"><span class="title-btn">Sign me in</span><!--<i v-else class="fa fa-spinner fa-pulse"></i>--></button>
 					</div>
 				</form>
 			</div>
@@ -29,6 +29,71 @@
 </template>
 
 <script>
+	import fb from 'firebase'
+
+	export default{
+	    data(){
+	        return{
+	            user: {
+	                username: '',
+                    password: ''
+                }
+
+			}
+		},
+		methods: {
+	        onSubmit(e){
+	            e.preventDefault();
+                this.$validator.validate().then((result)=>{
+                    if(!result){
+                        console.log('not valid');
+					}
+					else {
+                       console.log('valid');
+                       const User = {
+                           username: this.user.username,
+                           password: this.user.password
+                       }
+                       if(this.checkOrCreateUserInLocal(User)){
+                           return this.$router.push('/home');
+					   }
+						console.log(localStorage[User.username]);
+					}
+				})
+			},
+			checkOrCreateUserInLocal(obj){
+	            let localUser;
+				if(localStorage[obj.username]){
+                    localUser = JSON.parse(localStorage[obj.username]);
+                    if(obj.username === localUser.username && obj.password === localUser.password){
+                        //console.log(this.$router.push('/home'));
+						return true
+					}
+					else if(obj.username === localUser.username && obj.password !== localUser.password){
+                        //throw {message: 'this user already exists'}
+						return false
+					}
+				}
+				else{
+				    this.$store.dispatch('checkUserInDB',obj).then(res=>{
+				        if(res === true){
+				            console.log('worked');
+                            this.createUserLocal(obj);
+						}
+						else{
+				            console.log('dont work');
+                            this.createUserLocal(obj);
+                            this.$store.dispatch('createUser', obj);
+						}
+					});
+				    return true
+				}
+			},
+			createUserLocal(obj){
+			    localStorage[obj.username] = JSON.stringify(obj);
+			}
+		}
+	}
 
 </script>
 
