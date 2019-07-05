@@ -48,7 +48,6 @@ export default {
                 const users = [];
                 let count = 1
                 Object.keys(allUsers).forEach(key=>{
-                    //console.log(allUsers[key]);
                     allUsers[key].id = count++;
                     users.push(allUsers[key]);
                 });
