@@ -11,7 +11,7 @@
 			<div class="login-content">
 				<form method="POST" class="margin-bottom-0">
 					<div class="form-group m-b-20">
-						<input v-model="user.username" v-validate="{required:true, regex: /^[a-zA-Z]+$/}" id="username" class="input form-control" type="text" name="username"  placeholder="Username">
+						<input v-model="user.username" v-validate="{required:true, regex: /^[a-zA-Z]+$/, min: 4, max: 20}" id="username" class="input form-control" type="text" name="username"  placeholder="Username">
 						<span>{{ errors.first('username') }}<i v-if="errors.first('username')"> (latin letters only)</i></span>
 					</div>
 					<div class="form-group m-b-20">
