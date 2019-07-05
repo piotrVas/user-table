@@ -1,4 +1,4 @@
-import fb from 'firebase'
+import fb from 'firebase';
 
 export default {
     state:{
@@ -6,8 +6,7 @@ export default {
     },
     mutations:{
         setUsers(state,payload){
-            console.log(payload);
-            return state.users = payload
+            return state.users = payload;
         }
     },
     actions:{
@@ -26,8 +25,11 @@ export default {
                 let snapShot = await fb.database().ref('users').once('value');
                 let obj = snapShot.val();
                 for(let key in obj){
-                    console.log(obj[key]);
                     if(obj[key].username === payload.username && obj[key].password === payload.password){
+                        return true
+                    }
+                    else if(obj[key].username === payload.username && obj[key].password !== payload.password){
+                        commit('setError',' This user already exists');
                         return true
                     }
                 }

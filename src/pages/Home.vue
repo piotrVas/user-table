@@ -25,17 +25,10 @@
         </div>
         <i class="fa fa-spinner fa-spin fa-3x fa-fw reload" v-if="reload"></i>
         <div  class="user-not-found" v-if="users.length == 0&&!reload"><h2>Users not found</h2></div>
-
     </div>
 </template>
-
 <script>
     export default{
-        data(){
-            return{
-
-            }
-        },
         created(){
             this.$store.dispatch('getAllUsers');
         },
@@ -48,10 +41,7 @@
             }
         }
     }
-
-
 </script>
-
 <style>
     .home-cover-bg{
         background: url('../assets/home-bg.jpg') no-repeat center center;

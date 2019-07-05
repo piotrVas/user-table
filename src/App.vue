@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <!--<img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>-->
     <router-view></router-view>
     <div v-if="error" class="alert alert-danger width-lg" @click="handleError()">
       <span class="close" data-dismiss="alert">×</span>
@@ -10,15 +8,9 @@
     </div>
   </div>
 </template>
-
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'app',
-  components: {
-    //HelloWorld
-  },
   computed: {
       error(){
           return this.$store.getters.error
