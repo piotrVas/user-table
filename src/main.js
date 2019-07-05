@@ -23,7 +23,7 @@ Vue.component(VuePassword)
 
 const router = new VueRouter({
     routes,
-    mode: 'history'
+    mode: 'hash'
 })
 
 Vue.config.productionTip = false
