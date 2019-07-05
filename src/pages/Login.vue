@@ -1,8 +1,8 @@
 <template>
 	<div class="wrap-login">
-		<div class="login-cover">
-			<div class="login-cover-image"></div>
-			<div class="login-cover-bg"></div>
+		<div class="cover">
+			<div class="cover-image"></div>
+			<div class="cover-bg"></div>
 		</div>
 		<div class="login-window">
 			<div class="login-header">
@@ -133,20 +133,20 @@
 
 </script>
 <style>
-	.login-cover-image{
+	.cover-image{
 		background: url('../assets/login-bg.jpg') no-repeat center center;
 		background-size: cover;
 	}
-	.wrap-login, .login-cover{
+	.wrap-login, .cover{
 		position: fixed;
 		top: 0;
 		left: 0;
 		right: 0;
 	}
-	.login-cover-bg{
+	.cover-bg{
 		background: rgba(0,0,0,.5);
 	}
-	.login-cover-image, .login-cover-bg{
+	.cover-image, .cover-bg{
 		width: 100%;
 		height: 100vh;
 		position: fixed;

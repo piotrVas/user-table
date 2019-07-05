@@ -1,8 +1,8 @@
 <template>
     <div class="wrap-home">
-        <div class="login-cover">
-            <div class="login-cover-image"></div>
-            <div class="login-cover-bg home-cover-bg"></div>
+        <div class="cover">
+            <div class="cover-image"></div>
+            <div class="cover-bg home-cover-bg"></div>
         </div>
         <div v-if="users.length!=0 && !reload" class="wrap-content">
             <h1>Home Page</h1>
@@ -82,6 +82,9 @@
     @media(max-width: 900px){
         table{
             table-layout: fixed;
+        }
+        .wrap-content{
+            margin:0 5px;
         }
     }
 </style>
