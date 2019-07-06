@@ -54,79 +54,28 @@
 			}
 		},
 		methods: {
-            onSubmit(e){
-                e.preventDefault();
+            onSubmit(){
                 this.$validator.validate().then((result)=>{
                     if(!result){
-                        this.store.dispatch('setError','Not valid form');
+                        this.$store.dispatch('setError','Not valid form');
                     }
                     else {
                        this.$store.dispatch('getReload',true);
                        const User = {
                            username: this.user.username,
-                           password: this.user.password
+                           password: sha256(this.user.password)
                        }
-                       User.password = sha256(User.password);
-                       this.checkOrCreateUserInLocal(User);
+                       this.checkOrCreateUserInLocalOrDB(User);
                     }
                 })
             },
-            checkOrCreateUserInLocal(obj){
-                this.$store.dispatch('clearError');
-                let localUser;
-                if(localStorage[obj.username]){
-                    localUser = JSON.parse(localStorage[obj.username]);
-                    if(obj.username === localUser.username && obj.password === localUser.password){
-                        this.checkLocalUserInDB(obj);
-                        this.setDelayAndRoute(true);
-                    }
-                    else if(obj.username === localUser.username && obj.password !== localUser.password){
-                        (async ()=>{
-                          let result = await this.checkLocalUserInDB(obj);
-                          this.setDelayAndRoute(result);
-                        })();
-                    }
-                }
-                else{
-                    this.$store.dispatch('checkUserInDB',obj).then(res=>{
-                        if(res === true){
-                            this.createUserLocal(obj);
-                            this.setDelayAndRoute(true);
-                        }
-                        else{
-                            this.createUserLocal(obj);
-                            this.$store.dispatch('createUser', obj).then(()=>this.setDelayAndRoute(true));
-                        }
-                    });
-                    return true
-                }
-            },
-            createUserLocal(obj){
-                localStorage[obj.username] = JSON.stringify(obj);
-            },
-            async checkLocalUserInDB(obj){
-                let res = await this.$store.dispatch('checkUserInDB',obj).then(res=>{
-                    if(res === false){
-                        this.$store.dispatch('createUser', obj);
-                        return true
-                    }
-                    else{
-                        return false
-                    }
-                });
-                return res;
-            },
-            setDelayAndRoute(bool){
-              this.$store.dispatch('getReload', true)
-              if(bool) {
-                setTimeout(() => {
-                  this.$router.push('/home');
-                  this.$store.dispatch('getReload', false);
-                }, 2000);
-              }
-              else{
-                this.$store.dispatch('getReload', false);
-              }
+			checkOrCreateUserInLocalOrDB(obj){
+				this.$store.dispatch('clearError');
+				this.handleAccessToDB(obj,this.$router)
+			},
+            async handleAccessToDB(obj,route){
+              obj.route = route;
+              await this.$store.dispatch('checkUserInDB', obj);
             }
 		}
 	}

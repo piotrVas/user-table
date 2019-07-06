@@ -1,4 +1,5 @@
-import fb from 'firebase';
+import fb from 'firebase/app';
+import 'firebase/database';
 
 export default {
     state:{
@@ -13,30 +14,35 @@ export default {
         async createUser({commit},payload){
             commit('setClearError');
             try{
+                if(payload.route) delete payload.route;
                 await fb.database().ref('users').push(payload);
             }
             catch(error){
                 commit('setError', error.message);
             }
         },
-        async checkUserInDB({commit},payload){
+        async checkUserInDB({commit, dispatch},payload){
             commit('setClearError');
             try{
                 let snapShot = await fb.database().ref('users').once('value');
                 let obj = snapShot.val();
                 for(let key in obj){
                     if(obj[key].username === payload.username && obj[key].password === payload.password){
-                        return true
+                        dispatch('setDelayAndRoute', payload.route);
+                        dispatch('setUserInLocal',payload);
+                        return
                     }
                     else if(obj[key].username === payload.username && obj[key].password !== payload.password){
-                        commit('setError',' This user already exists');
-                        return true
+                        throw {message: 'This user name already exists'};
                     }
                 }
-                return false
+                dispatch('setDelayAndRoute', payload.route);
+                dispatch('createUser', payload);
+                dispatch('setUserInLocal',payload);
             }
             catch(error){
                 commit('setError', error.message);
+                commit('setReload', false);
             }
         },
         async getAllUsers({commit}){
@@ -58,6 +64,16 @@ export default {
                 commit('setError',error.message);
                 commit('setReload',false);
             }
+        },
+        setUserInLocal({commit},payload){
+            try{
+                if(payload.route)delete payload.route;
+                localStorage[payload.username] = JSON.stringify(payload);
+            }
+            catch(error){
+                commit('setError',error.message);
+            }
+
         }
     },
     getters:{
