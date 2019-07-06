@@ -1,7 +1,8 @@
 export default {
     state: {
         reload: false,
-        error: null
+        error: null,
+        greeting: ''
     },
     mutations: {
         setReload(state,payload){
@@ -12,6 +13,9 @@ export default {
         },
         setClearError(state){
             state.error = null
+        },
+        setGreeting(state,payload){
+            state.greeting = payload
         }
     },
     actions: {
@@ -27,6 +31,9 @@ export default {
         setDelayAndRoute({commit},payload){
           commit('setReload', true);
           setTimeout(() => {payload.push('/home');commit('setReload', false);}, 2000);
+        },
+        setGreeting({commit},payload){
+            commit('setGreeting',payload)
         }
     },
     getters: {
@@ -35,6 +42,9 @@ export default {
         },
         error(state){
             return state.error;
+        },
+        greeting(state){
+            return state.greeting;
         }
     }
 }

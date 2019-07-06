@@ -25,12 +25,30 @@
         </div>
         <i class="fa fa-spinner fa-spin fa-3x fa-fw reload" v-if="reload"></i>
         <div  class="user-not-found" v-if="users.length == 0&&!reload"><h2>Users not found</h2></div>
+
+        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+            <div class="toast" style="position: absolute; top: 0; right: 0;">
+                <div class="toast-header">
+                    <img src="" class="rounded mr-2" alt="...">
+                    <strong class="mr-auto">Bootstrap</strong>
+                    <small>11 mins ago</small>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    Hello, world! This is a toast message.
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 <script>
     export default{
         created(){
             this.$store.dispatch('getAllUsers');
+            this.makeToast('secondary');
         },
         computed:{
             users(){
@@ -38,7 +56,22 @@
             },
             reload(){
                 return this.$store.getters.reload;
+            },
+            greeting(){
+                return this.$store.getters.greeting;
             }
+        },
+        methods:{
+          makeToast(variant = null) {
+            this.$bvToast.toast(`${this.greeting}`, {
+              title: 'Notifications',
+              variant: variant,
+              solid: true
+            })
+          }
+        },
+        beforeDestroy(){
+          this.$store.dispatch('setGreeting','');
         }
     }
 </script>

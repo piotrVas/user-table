@@ -30,6 +30,7 @@ export default {
                     if(obj[key].username === payload.username && obj[key].password === payload.password){
                         dispatch('setDelayAndRoute', payload.route);
                         dispatch('setUserInLocal',payload);
+                        commit('setGreeting',`Nice to see You again, ${payload.username}`);
                         return
                     }
                     else if(obj[key].username === payload.username && obj[key].password !== payload.password){
@@ -39,6 +40,7 @@ export default {
                 dispatch('setDelayAndRoute', payload.route);
                 dispatch('createUser', payload);
                 dispatch('setUserInLocal',payload);
+                commit('setGreeting',`Welcome, ${payload.username}`);
             }
             catch(error){
                 commit('setError', error.message);
