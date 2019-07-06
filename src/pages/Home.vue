@@ -1,11 +1,11 @@
 <template>
     <div class="wrap-home">
         <div class="cover">
-            <div class="cover-image"></div>
-            <div class="cover-bg home-cover-bg"></div>
+            <div class="cover-image home-image"></div>
+            <div class="cover-bg"></div>
         </div>
         <div v-if="users.length!=0 && !reload" class="wrap-content">
-            <h1>Home Page</h1>
+            <h1>Users</h1>
             <table class="table table-dark">
                 <thead>
                     <tr>
@@ -43,8 +43,12 @@
     }
 </script>
 <style>
-    .home-cover-bg{
+    .home-image{
         background: url('../assets/home-bg.jpg') no-repeat center center;
+        background-size: cover;
+    }
+    .wrap-home{
+        height: 100%;
     }
     .wrap-content{
         position: relative;
@@ -53,6 +57,14 @@
         align-items: center;
         max-width: 900px;
         margin: 0 auto;
+        top: 50%;
+        transform: translate(0,-50%);
+    }
+    .wrap-content h1{
+        background: #343a40;
+        padding: 10px 20px;
+        opacity: 0.9;
+        color: #fff;
     }
     .reload{
         top: 50%;
@@ -78,13 +90,16 @@
     }
     table{
         table-layout: auto;
+        opacity: 0.9;
     }
     @media(max-width: 900px){
         table{
             table-layout: fixed;
         }
         .wrap-content{
-            margin:0 5px;
+            margin:60px 5px;
+            top: 0;
+            transform: translate(0%,0%);
         }
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div class="wrap-login">
 		<div class="cover">
-			<div class="cover-image"></div>
+			<div class="login-image cover-image"></div>
 			<div class="cover-bg"></div>
 		</div>
 		<div class="login-window">
@@ -133,15 +133,20 @@
 
 </script>
 <style>
-	.cover-image{
+	.login-image{
 		background: url('../assets/login-bg.jpg') no-repeat center center;
 		background-size: cover;
 	}
-	.wrap-login, .cover{
+	.wrap-login{
+		position: static;
+		height: 100%;
+	}
+	.cover{
 		position: fixed;
 		top: 0;
 		left: 0;
 		right: 0;
+		height: 100%;
 	}
 	.cover-bg{
 		background: rgba(0,0,0,.5);
@@ -154,20 +159,15 @@
 	.login-window{
 		color: #ccc;
 		width: 400px;
-		margin: 168px 0 0 -200px;
 		position: absolute;
-		top: 0;
+		top: 50%;
 		left: 50%;
+		transform: translate(-50%,-50%);
 		border-radius: 4px;
 	}
 	.login-header{
 		width: 400px;
 		padding: 0 20px;
-		margin: 0;
-		top: 0;
-		left: 0;
-		right: 0;
-		position: relative;
 	}
 	.login-header h1{
 		color: #fff;
@@ -176,11 +176,11 @@
 		.login-window{
 			width: 100%;
 			position: relative;
-			top: 0;
+			top: 50%;
 			left: 0;
 			right: 0;
 			bottom: 0;
-			transform: translate(0%,50%);
+			transform: translate(0%,-50%);
 			margin: 0 auto;
 			padding: 20px;
 		}

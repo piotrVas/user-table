@@ -31,12 +31,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
 }
 .alert{
   top:0;
   left:0;
   position: fixed;
   width: 100%;
+}
+html, body{
+  height: 100%;
 }
 </style>
